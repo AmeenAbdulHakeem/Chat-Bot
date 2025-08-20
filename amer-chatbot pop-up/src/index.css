@@ -1,0 +1,390 @@
+/* Chatbot Widget - Floating/Popup Version */
+
+/* Widget Container - Fixed position for floating */
+.amer-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+/* Floating Action Button (Chat Icon) */
+.amer-fab {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0284c7, #0891b2);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.amer-fab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.amer-fab.opened {
+  transform: rotate(45deg);
+}
+
+/* Notification Badge */
+.amer-badge-notification {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Chatbot Window */
+.amer-widget-window {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 400px;
+  height: 600px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.amer-widget-window.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Header (same as before but adjusted for widget) */
+.amer-header {
+  padding: 16px;
+  background: linear-gradient(to right, #0284c7, #0891b2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.amer-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.amer-bot-icon {
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+}
+
+.amer-header-info h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.amer-header-info p {
+  font-size: 12px;
+  opacity: 0.9;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.amer-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.amer-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.amer-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.amer-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.amer-badge:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.amer-badge.verified {
+  background: #dcfce7;
+}
+
+.amer-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 11px;
+  transition: background-color 0.15s;
+}
+
+.amer-lang-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Chat Area (adjusted for smaller widget) */
+.amer-chat-area {
+  height: 400px;
+  overflow-y: auto;
+  padding: 12px;
+  background: #fafafa;
+}
+
+.amer-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.amer-message {
+  display: flex;
+}
+
+.amer-message.user {
+  justify-content: flex-end;
+}
+
+.amer-message.bot {
+  justify-content: flex-start;
+}
+
+.amer-message-avatar {
+  margin-top: 16px;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.amer-message-avatar.bot {
+  margin-right: 8px;
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.amer-message-avatar.user {
+  margin-left: 8px;
+  background: #f0f9ff;
+  color: #0369a1;
+}
+
+.amer-message-bubble {
+  max-width: 80%;
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.amer-message-bubble.user {
+  background: #0284c7;
+  color: white;
+}
+
+.amer-message-bubble.bot {
+  background: white;
+  color: #111827;
+}
+
+.amer-message-text {
+  white-space: pre-wrap;
+  line-height: 1.4;
+  font-size: 14px;
+  margin: 0;
+}
+
+.amer-typing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.amer-typing svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Quick Replies */
+.amer-quick-replies {
+  padding: 8px 12px 0;
+  background: #fafafa;
+}
+
+.amer-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.amer-chip {
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  font-size: 11px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.15s;
+}
+
+.amer-chip:hover {
+  background: #f9f9f9;
+}
+
+/* Input Area */
+.amer-input-area {
+  padding: 12px;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+}
+
+.amer-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.amer-input-wrapper {
+  flex: 1;
+}
+
+.amer-input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+
+.amer-input:focus {
+  outline: 2px solid #7dd3fc;
+  outline-offset: 2px;
+}
+
+.amer-input.rtl {
+  direction: rtl;
+}
+
+.amer-send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: #0284c7;
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.15s;
+}
+
+.amer-send-btn:hover {
+  background: #0369a1;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  .amer-widget {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .amer-widget-window {
+    width: calc(100vw - 20px);
+    height: calc(100vh - 100px);
+    right: -10px;
+  }
+  
+  .amer-fab {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+/* RTL Support */
+.rtl {
+  direction: rtl;
+}
+
+/* Animations */
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0,0,0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+.amer-fab.bounce {
+  animation: bounce 1s ease-in-out;
+}
